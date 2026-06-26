@@ -12,9 +12,9 @@ Ferramenta interna da VVarelAI. Operador unico (Vitor). Corre no VPS Contabo
 ## Como funciona
 
 ```text
-URL -> FireCrawl (conteudo + imagens + design system + screenshot)
-    -> Vista de design system (aprovar/ajustar)
-    -> GLM-5.2 gera as 3 versoes [design system + regra global + regra de slot]
+URL -> FireCrawl (conteudo + imagens + pistas fracas de marca + screenshot)
+    -> Vista dos 3 design systems Montra (aprovar/ajustar)
+    -> GLM-5.2 gera as 3 versoes [design system Montra + regra global + regra de slot + skills do slot]
     -> Grid 3x1 (atalhos 1-3)
     -> GPT Image 2 (fal) melhora as fotos
     -> Pasta por lead no disco + screenshot do grid no dashboard
@@ -37,7 +37,7 @@ vocabulario visual que essas regras devem respeitar.
 | `DESIGN.md` | Indice dos 3 estilos + tokens de UI da app. |
 | `design/` | Contratos ricos por slot (`slot-1..3.md`), fidelidade alta. |
 | `docs/` | PRD canonico, arquitetura, custos. |
-| `rules/` | `global.md` + `slots/slot-1..3.md` (+ `_parked/`). Ficheiros como interface. |
+| `rules/` | `global.md` + `slots/slot-1..3.md` + `skills/*.md` (+ `_parked/`). Ficheiros como interface. |
 | `leads/` | Persistencia. Uma pasta por lead, runtime fora do git. |
 | `app/` | Codigo da app, frontend e backend. |
 

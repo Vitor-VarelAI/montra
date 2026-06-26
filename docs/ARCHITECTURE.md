@@ -9,14 +9,14 @@
 ```
 [Fase 1] Input          URL (principal) | texto livre (alternativa) + toggle Website/Web app
    │
-[Fase 2] Extração       FireCrawl: markdown + imagens + design system + screenshot do site antigo
+[Fase 2] Extração       FireCrawl: markdown + imagens + pistas fracas de marca + screenshot do site antigo
    │                    → escreve em leads/<slug>/source/
    │
 [Fase 3] Design systems Vista própria (separadores estilo Excel). Vitor aprova/ajusta 3 sistemas.
    │                    → grava leads/<slug>/design-systems.json  (um sistema por slot)
    │
 [Fase 4] Geração        Para cada slot 1..3, em paralelo:
-   │                       prompt = design-systems[N] + rules/global.md + rules/slots/slot-N.md
+   │                       prompt = design-systems[N] + rules/global.md + rules/slots/slot-N.md + rules/skills/*.md
    │                       GLM-5.2 (via OpenCode Zen, API HTTP direta) → HTML
    │                    → leads/<slug>/versions/slot-N.html
    │
@@ -32,10 +32,10 @@
 
 ## 2. A montagem do prompt (o coração)
 
-Cada janela recebe a **soma** de três camadas (PRD §4):
+Cada janela recebe a **soma** das camadas de geração (PRD §4):
 
 ```
-design system do slot + regra global (rules/global.md) + regra do slot (rules/slots/slot-N.md)
+design system Montra do slot + regra global (rules/global.md) + regra do slot (rules/slots/slot-N.md) + skills do slot (rules/skills/*.md)
 = prompt de geração da janela N
 ```
 
@@ -43,7 +43,7 @@ Regenerar uma janela (ajuste fino):
 ```
 soma anterior + prompt do Vitor para a janela N  →  refaz SÓ slot-N.html
 ```
-As outras 5 não tocam, não gastam tokens. O prompt do Vitor **soma-se** à regra do
+As outras 2 não tocam, não gastam tokens. O prompt do Vitor **soma-se** à regra do
 slot (afina por cima), não a substitui.
 
 **As regras são lidas do disco a cada geração.** Mudar um `.md` muda a geração

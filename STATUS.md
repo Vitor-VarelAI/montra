@@ -1,31 +1,35 @@
-# STATUS — Montra
+# STATUS - Montra
 
-> Cópia local. A fonte canónica de estado vive no Atlas vault, como os outros projetos.
-
-**Fase atual:** scaffold criado. À espera de construção do código (Hermes).
-**Última atualização:** 2026-06-26.
+> Copia local. A fonte canonica de estado vive no Atlas vault, como nos outros projetos.
 
 ## Feito
-- [x] PRD fechado (`docs/PRD.md`).
-- [x] Esqueleto do repo (estrutura, `.md`, plano) — Claude Code.
-- [x] Contrato da pasta de lead documentado (`leads/_example/`).
-- [x] Plano de arquitetura para o Hermes (`docs/ARCHITECTURE.md`).
-- [x] Regras v1 definidas (global + 3 slots).
-- [x] `DESIGN.md` criado como contrato canónico (agora índice dos 3 estilos do trio, `@google/design.md`).
-- [x] `DESIGN.md` ligado ao prompt de geração por slot.
-- [x] UI de regras: regra global, regra por slot e prompt específico por janela.
-- [x] Export por slot: HTML + design system + contrato visual + regras + prompt.
-- [x] Fotos via fal/GPT Image 2: melhora fotos reais do slot, guarda assets e atualiza HTML.
 
-## A seguir
-- [ ] Hermes constrói a app (`app/`): GPT-5.5 autor, DeepSeek arquitetura.
-- [ ] Frontend clone do Recast (grid 3×1, creme, atalhos 1-3).
-- [ ] Pipeline completo em volume: FireCrawl → design system → GLM-5.2 → fal.
-- [ ] Ajustar custo/qualidade alvo das fotos por lead.
+- PRD fechado em `docs/PRD.md`.
+- Esqueleto do repo criado com docs, regras e plano inicial.
+- Contrato da pasta de lead documentado em `leads/_example/`.
+- Arquitetura documentada em `docs/ARCHITECTURE.md`.
+- Trio fixo de slots definido:
+  1. Minimalista Premium.
+  2. Editorial de Marca.
+  3. Conversao Direta.
+- `DESIGN.md` criado como indice canonico dos 3 estilos (`@google/design.md`).
+- Contratos ricos por slot criados em `design/slot-1.md`, `design/slot-2.md`, `design/slot-3.md`.
+- Regras v1 definidas em `rules/global.md` e `rules/slots/slot-1..3.md`.
+- Referencias antigas estacionadas em `rules/slots/_parked/`.
+- UI de regras implementada: regra global, regra por slot e prompt especifico por janela.
+- Export por slot inclui HTML, design system, contrato visual, regras, skills, prompt e assets.
+- Fotos via fal/GPT Image 2 implementadas para melhorar fotos reais por slot.
+- Skills de prompt por slot implementadas:
+  - slot 2 usa `storybrand`.
+  - slot 3 usa `copywriter`.
+- Design systems ja nao copiam o site original. O URL serve para conteudo, imagens e pistas fracas de marca; o trio Montra manda na direcao visual.
+- Leads existentes migrados em runtime para 3 design systems distintos.
+- Cloudflare quick tunnel ativo para preview:
+  `https://investigation-cottage-classes-suggest.trycloudflare.com`
 
-## Pendentes antes de correr em volume (PRD §12)
-1. [ ] Decidir comportamento perante o delegation-gate (PRD §8).
-2. [ ] Confirmar qualidade/custo das fotos por geração (PRD §7).
+## A Seguir
 
-## Decisões em aberto (não bloqueiam v1)
-- ~~Delegation-gate~~ — resolvido: a app chama o OpenCode Zen direto, não passa pelo Hermes em runtime (PRD §8).
+- Testar novas geracoes/regeneracoes depois da mudanca de design systems.
+- Afinar receitas de foto por slot, inspiradas em referencias tipo Nano Banana, sem deixar a foto fugir do negocio real.
+- Se o quick tunnel cair, recriar tunnel para `http://localhost:3010`.
+- Commit/push desta leva fecha a mudanca de skills por slot e design systems Montra-first.

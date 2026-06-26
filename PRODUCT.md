@@ -12,7 +12,7 @@ repository folder (`projects/prisma`) remains unchanged for path stability.
 ## Purpose
 
 Montra creates outbound redesign demos. The operator enters a lead website URL,
-reviews or adjusts the extracted design system, then generates three redesign
+reviews or adjusts three Montra slot design systems, then generates three redesign
 versions of the same site in distinct visual directions.
 
 The goal is the first visual hit: give Vitor a concrete redesign demo that can
@@ -26,14 +26,14 @@ through a Cloudflare Tunnel.
 ## Core Flow
 
 1. Enter a URL, or a short free-text description when there is no site.
-2. Scrape content, images, screenshot, and design cues through FireCrawl.
-3. Review and adjust three design systems, one per generated version.
+2. Scrape content, images, screenshot, and weak brand cues through FireCrawl.
+3. Review and adjust three Montra design systems, one per generated version.
 4. Approve the three design systems.
 5. Generate three self-contained HTML redesign versions through GLM-5.2 via OpenCode Zen.
 6. Review the versions in a 3 by 1 grid with keyboard shortcuts 1 to 3.
 7. Regenerate a single slot with an extra prompt when needed.
 8. Improve selected slot photos through fal/GPT Image 2.
-9. Export the chosen slot with HTML, design system, rules, prompt and assets.
+9. Export the chosen slot with HTML, design system, rules, slot prompt skills, prompt and assets.
 10. Persist each lead as a folder on disk.
 
 ## Product Principles
@@ -41,8 +41,8 @@ through a Cloudflare Tunnel.
 - PT-PT interface copy.
 - Operator speed beats account, CRM, or sharing workflows.
 - The filesystem is the source of truth for v1.
-- Generated versions are governed by approved slot design system, global rule,
-  slot rule, rich slot contract in `design/slot-N.md`, and optional user prompt.
+- Generated versions are governed by the approved Montra slot design system, global rule,
+  slot rule, slot prompt skills, rich slot contract in `design/slot-N.md`, and optional user prompt.
 - The design system review step gives each slot its own visual direction and
   prevents every output from inheriting the old site's look.
 - No code streaming in the UI. Show progress states and the rendered result.

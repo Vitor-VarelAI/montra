@@ -9,7 +9,7 @@ import {
   readSlotPrompts,
   readSourceData,
 } from "@/lib/leads"
-import { readGlobalRule, readSlotRule } from "@/lib/rules"
+import { readActiveSkillRules, readGlobalRule, readSlotRule } from "@/lib/rules"
 import { isValidSlot } from "@/lib/slots"
 
 export async function GET(req: NextRequest) {
@@ -27,12 +27,13 @@ export async function GET(req: NextRequest) {
   const html = await readHtml(slug, slot)
   if (!html) return NextResponse.json({ error: "versão em falta" }, { status: 404 })
 
-  const [designSystem, designSystems, globalRule, slotRule, designContract, slotPrompts, sourceData, photoAssets] =
+  const [designSystem, designSystems, globalRule, slotRule, skills, designContract, slotPrompts, sourceData, photoAssets] =
     await Promise.all([
       readDesignSystem(slug),
       readDesignSystems<unknown[]>(slug),
       readGlobalRule(),
       readSlotRule(slot),
+      readActiveSkillRules(slot),
       readSlotDesignContract(slot),
       readSlotPrompts(slug),
       readSourceData(slug),
@@ -51,6 +52,7 @@ export async function GET(req: NextRequest) {
     rules: {
       global: globalRule,
       slot: slotRule,
+      skills,
     },
     userPrompt: slotPrompts[String(slot)] || "",
     photoAssets: photoAssets.filter((asset) => asset.slot === slot),

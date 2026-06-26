@@ -309,7 +309,10 @@ export default function LeadPage() {
         <div className="space-y-8">
           <section>
             <h3 className="text-sm font-medium mb-3 uppercase text-ink/60">Sistemas por janela</h3>
-            <div className="grid grid-cols-2 md:grid-cols-6 gap-2">
+            <p className="mb-4 max-w-2xl text-sm text-ink/55">
+              O URL original serve para conteúdo, imagens e pistas de marca. A direção visual vem dos três sistemas Montra.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
               {designSystems.map((system, i) => (
                 <button
                   key={i}

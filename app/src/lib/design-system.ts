@@ -60,7 +60,7 @@ function extractColors(html: string): { name: string; hex: string }[] {
     const matches = block.match(HEX_RE) || []
     for (const hex of matches) {
       const h = hex.toLowerCase()
-      if (!found.has(h)) found.set(h, `Cor ${found.size + 1}`)
+      if (!found.has(h) && found.size < 8) found.set(h, `Cor ${found.size + 1}`)
     }
   }
 
@@ -106,9 +106,18 @@ export function extractDesignSystem(scrape: ScrapeResult): DesignSystem {
   const typography = extractFonts(scrape.html)
 
   return {
-    colors: colors.length > 0 ? colors : [{ name: "Primario", hex: "#333333" }, { name: "Secundario", hex: "#666666" }],
+    colors: colors.length > 0
+      ? colors
+      : [
+          { name: "Primario", hex: "#333333" },
+          { name: "Secundario", hex: "#666666" },
+        ],
     typography,
     spacing: "16px base, 8px gutter",
+    raw: {
+      source: "original-site",
+      role: "brand-hints-only",
+    },
   }
 }
 
@@ -117,9 +126,12 @@ export function createInitialSlotDesignSystems(scrape: ScrapeResult): DesignSyst
 
   return SLOT_DESIGN_SYSTEMS.map((system, index) => ({
     ...system,
+    colors: system.colors.map((color) => ({ ...color })),
+    typography: { ...system.typography },
     raw: {
       slot: index + 1,
-      source: "montra-default",
+      source: "montra-slot-contract",
+      originalSiteRole: "content, imagery, brand hints; not primary visual direction",
       extracted,
     },
   }))

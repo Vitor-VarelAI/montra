@@ -22,7 +22,7 @@ Operador único: o Vitor. Corre no VPS Contabo (Nuremberg, headless, sem GPU). A
 
 Fluxo de uso típico:
 1. Vitor mete um URL de um lead (ex: um restaurante, um barbeiro, um canalizador com site fraco).
-2. A Montra extrai o design system e o conteúdo do site.
+2. A Montra extrai conteúdo, imagens, screenshot e pistas fracas de marca. Não assume o design system visual do site original.
 3. Vitor vê o design system, aprova ou ajusta.
 4. A Montra gera as 3 versões.
 5. Vitor vê as 3, escolhe, e usa a melhor para abrir conversa com o lead (distribuição à mão, fora da app).
@@ -82,13 +82,13 @@ Volume esperado: dezenas de leads. Pragmatismo e velocidade acima de tudo.
 
 ## 4. O sistema de regras (o coração do controlo)
 
-O GLM não é deixado à solta. Três camadas guiam cada geração, e somam-se:
+O GLM não é deixado à solta. Quatro camadas guiam cada geração, e somam-se. As skills de prompt por slot são uma quinta camada de ofício, configurada por slot:
 
-**Camada 1 — Design system do slot.** Cores, tipografia, espaçamento. Aprovado pelo Vitor na Fase 3. Aplica-se à janela correspondente.
+**Camada 1 — Design system Montra do slot.** Cores, tipografia e espaçamento vêm do trio Montra. O site original dá conteúdo e pistas fracas de identidade, não a direção visual principal.
 
 **Camada 2 — Regra global (.md).** O gosto de fundo do Vitor. Princípios de design, o que sempre fazer, o que nunca fazer. Um ficheiro .md, editável. Aplica-se a todas as 3 janelas.
 
-**Camada 3 — Regra de slot (.md, x6).** Cada uma das 3 janelas tem a sua regra de estilo num .md próprio. Slot 1 minimalista, slot 2 editorial, slot 3 dark, etc (estilos a definir pelo Vitor). Editáveis: o Vitor abre o .md e muda o estilo do slot quando quiser.
+**Camada 3 — Regra de slot (.md, x3).** Cada uma das 3 janelas tem a sua regra de estilo num .md próprio. Slot 1 Minimalista Premium, slot 2 Editorial de Marca, slot 3 Conversao Direta. Editáveis: o Vitor abre o .md e muda o estilo do slot quando quiser.
 
 **Contrato visual (`DESIGN.md`).** Fonte canónica dos três estilos: nomes,
 paletas, tipografia, layout e critérios de uso. `rules/global.md` e
@@ -98,20 +98,17 @@ cada geração.
 Estilos v1:
 1. Minimalista Premium.
 2. Editorial de Marca.
-3. Dark Impacto.
-4. Luxo Classico.
-5. Confianca Tecnica.
-6. Conversao Direta.
+3. Conversao Direta.
 
-A soma das três é o que o GLM recebe para gerar cada janela:
+A soma das camadas é o que o GLM recebe para gerar cada janela:
 ```
-design system do slot + regra global + regra do slot = prompt de geração daquela janela
+design system do slot + regra global + regra do slot + skills do slot = prompt de geração daquela janela
 ```
 
 ### Prompt por janela (ajuste fino)
 - Cada janela tem um campo onde o Vitor escreve um prompt e regenera **só aquela janela**.
 - Caso de uso: o Vitor vê uma versão de que gosta, quer afinar ("este, mas com mais verde", "muda o header"), e refaz só aquele slot.
-- Regenera apenas a janela visada. As outras 5 ficam intactas, não se regeneram, não gastam tokens.
+- Regenera apenas a janela visada. As outras 2 ficam intactas, não se regeneram, não gastam tokens.
 - O prompt soma-se à regra do slot (mantém o estilo, afina por cima). Não a substitui.
 
 ### Editabilidade (princípio agent-native)
@@ -124,7 +121,7 @@ design system do slot + regra global + regra do slot = prompt de geração daque
 ### Export por janela
 - A janela escolhida tem ação de export.
 - O export junta: HTML da versão, design system aprovado daquela aba, contrato
-  visual do slot, regra global, regra do slot, prompt específico e dados de
+  visual do slot, regra global, regra do slot, skills do slot, prompt específico e dados de
   origem disponíveis.
 - Objetivo: a versão escolhida sai com o seu contexto, para ser reutilizada,
   revista por agente ou entregue a outro fluxo sem perder intenção visual.
@@ -183,9 +180,9 @@ O Hermes só aparece noutro sentido, não-runtime: como convénio de quem **escr
 
 ### Dentro da v1
 - Input por URL (principal) e por texto (alternativo).
-- Extração de conteúdo, imagens e design system (FireCrawl).
+- Extração de conteúdo, imagens, screenshot e pistas fracas de marca (FireCrawl).
 - Vista de design system, com aprovação/ajuste.
-- Geração das 3 versões (GLM-5.2), governadas por design system + regra global + regra de slot.
+- Geração das 3 versões (GLM-5.2), governadas por design system Montra + regra global + regra de slot + skills do slot.
 - Sistema de regras: regra global .md + 3 regras de slot .md, editáveis.
 - Prompt por janela, regenera só aquela.
 - Fotos via GPT Image 2 (fal), com golpe de vista como prioridade.
@@ -219,7 +216,7 @@ O Hermes só aparece noutro sentido, não-runtime: como convénio de quem **escr
 - Só GLM-5.2 gera as 3. Sem Claude-mãe.
 - URL é o caminho principal. Texto é alternativa.
 - Design systems por slot primeiro, aprovados, e só então geração. O sistema extraído do URL serve de referência, mas as 3 versões não devem ficar presas ao aspeto antigo.
-- Três camadas de regra: design system + global + slot. Somam-se.
+- Camadas de regra: design system + global + slot + skills do slot. Somam-se.
 - Prompt por janela regenera só aquela janela. Soma-se à regra do slot.
 - Regras de slot editáveis (.md).
 - Fotos: GPT Image 2 via fal. Edit a partir das reais, text-to-image como recurso. Golpe de vista, não perfeição.
