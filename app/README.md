@@ -12,6 +12,6 @@ do **arquiteto (DeepSeek)**. Construir a partir de:
 - `rules/` — regras que alimentam a geração (lidas do disco em runtime).
 
 Contratos a respeitar (não negociáveis, vêm do PRD):
-- Frontend clone do Recast: grid 3×2, creme, atalhos 1-6, loading simples, sem streaming.
+- Frontend clone do Recast: grid 3×1, creme, atalhos 1-3, loading simples, sem streaming.
 - Geração por janela = design system + `rules/global.md` + `rules/slots/slot-N.md` (+ prompt do Vitor ao regenerar uma).
 - Persistência = pasta por lead (`leads/<slug>/`, ver `leads/_example/`).

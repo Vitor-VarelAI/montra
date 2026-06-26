@@ -1,33 +1,33 @@
-# Slot 3 - Dark Impacto
+# Slot 6 - Conversao Direta
 
 ## Ideia
 
-Uma versao escura, forte e cinematica. Alto contraste, foco em energia,
-autoridade e impacto imediato.
+Uma versao comercial, rapida e orientada a acao. Mais agressiva em CTA,
+beneficios e oferta.
 
 ## Melhor para
 
-Ginasios, tecnologia, eventos, bares, automovel, estetica premium, marcas que
-querem parecer mais modernas ou mais intensas.
+Negocios que precisam de leads: servicos locais, cursos, estetica, reparacoes,
+consultas, reservas, campanhas e ofertas sazonais.
 
 ## Fazer
 
-- Fundo escuro real, nao cinzento lavado.
-- Texto grande com contraste alto.
-- Um acento luminoso usado com disciplina.
-- Secoes com profundidade: imagens grandes, faixas, blocos sobrepostos quando
-  fizer sentido.
-- CTA claro e visivel.
-- Usar movimento sugerido por composicao, nao animacoes complexas.
+- Hero com oferta clara e CTA imediato.
+- Beneficios em linguagem simples.
+- Prova perto do CTA.
+- Secoes curtas e escaneaveis.
+- Repetir CTA em pontos logicos.
+- Usar contraste e cor para guiar a acao.
+- Se houver contacto, horario ou localizacao, tornar isso muito visivel.
 
 ## Evitar
 
-- Neon em todo o lado.
-- Texto cinzento pouco legivel.
-- Fundos escuros sem conteudo.
-- Estetica gamer quando o negocio nao pede.
-- Gradientes roxos genericos.
+- Parecer pagina de afiliados.
+- Popups falsos.
+- Urgencia inventada.
+- Descontos ou garantias inexistentes.
+- Excesso de caixas e setas.
 
 ## Resultado esperado
 
-O lead deve ver uma versao com muito mais forca, contraste e memorabilidade.
+O lead deve ver uma versao que parece feita para receber contactos agora.

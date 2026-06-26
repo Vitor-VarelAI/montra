@@ -1,4 +1,4 @@
-# STATUS — Prisma
+# STATUS — Montra
 
 > Cópia local. A fonte canónica de estado vive no Atlas vault, como os outros projetos.
 
@@ -10,8 +10,8 @@
 - [x] Esqueleto do repo (estrutura, `.md`, plano) — Claude Code.
 - [x] Contrato da pasta de lead documentado (`leads/_example/`).
 - [x] Plano de arquitetura para o Hermes (`docs/ARCHITECTURE.md`).
-- [x] Regras v1 definidas (global + 6 slots).
-- [x] `DESIGN.md` criado como contrato canónico dos 6 estilos (`@google/design.md`).
+- [x] Regras v1 definidas (global + 3 slots).
+- [x] `DESIGN.md` criado como contrato canónico (agora índice dos 3 estilos do trio, `@google/design.md`).
 - [x] `DESIGN.md` ligado ao prompt de geração por slot.
 - [x] UI de regras: regra global, regra por slot e prompt específico por janela.
 - [x] Export por slot: HTML + design system + contrato visual + regras + prompt.
@@ -19,7 +19,7 @@
 
 ## A seguir
 - [ ] Hermes constrói a app (`app/`): GPT-5.5 autor, DeepSeek arquitetura.
-- [ ] Frontend clone do Recast (grid 3×2, creme, atalhos 1-6).
+- [ ] Frontend clone do Recast (grid 3×1, creme, atalhos 1-3).
 - [ ] Pipeline completo em volume: FireCrawl → design system → GLM-5.2 → fal.
 - [ ] Ajustar custo/qualidade alvo das fotos por lead.
 
@@ -28,4 +28,4 @@
 2. [ ] Confirmar qualidade/custo das fotos por geração (PRD §7).
 
 ## Decisões em aberto (não bloqueiam v1)
-- Delegation-gate: gerações do Prisma disparam o aviso de custo, ou passam livres como trabalho normal da app? (PRD §8)
+- ~~Delegation-gate~~ — resolvido: a app chama o OpenCode Zen direto, não passa pelo Hermes em runtime (PRD §8).

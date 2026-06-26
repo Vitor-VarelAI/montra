@@ -1,5 +1,6 @@
 import { promises as fs } from "fs"
 import path from "path"
+import { isValidSlot } from "./slots"
 
 const LEADS_DIR = process.env.LEADS_DIR || path.join(process.cwd(), "..", "leads")
 
@@ -123,7 +124,7 @@ export async function readSlotPrompts(slug: string): Promise<Record<string, stri
 }
 
 export async function saveSlotPrompt(slug: string, slot: number, prompt: string): Promise<void> {
-  if (slot < 1 || slot > 6) throw new Error("slot inválido")
+  if (!isValidSlot(slot)) throw new Error("slot inválido")
   const prompts = await readSlotPrompts(slug)
   prompts[String(slot)] = prompt
   await fs.writeFile(path.join(leadPath(slug), "slot-prompts.json"), JSON.stringify(prompts, null, 2))

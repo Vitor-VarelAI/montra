@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { readAllSlotRules, readGlobalRule, writeGlobalRule, writeSlotRule } from "@/lib/rules"
+import { SLOT_COUNT } from "@/lib/slots"
 
 export async function GET() {
   const [globalRule, slotRules] = await Promise.all([readGlobalRule(), readAllSlotRules()])
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest) {
 
   if (globalRule !== null) writes.push(writeGlobalRule(globalRule))
   if (slotRules) {
-    for (let i = 0; i < Math.min(slotRules.length, 6); i++) {
+    for (let i = 0; i < Math.min(slotRules.length, SLOT_COUNT); i++) {
       if (typeof slotRules[i] === "string") writes.push(writeSlotRule(i + 1, slotRules[i]))
     }
   }

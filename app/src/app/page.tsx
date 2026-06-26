@@ -33,9 +33,9 @@ export default function Home() {
   return (
     <main className="max-w-2xl mx-auto px-6 py-24">
       <header className="mb-12 text-center">
-        <h1 className="text-4xl font-light tracking-tight mb-2">Prisma</h1>
+        <h1 className="text-4xl font-light tracking-tight mb-2">Montra</h1>
         <p className="text-sm text-ink/60">
-          Uma entrada, seis saídas. Redesign de sites para outbound.
+          Uma entrada, três saídas. Redesign de sites para outbound.
         </p>
       </header>
 

@@ -10,82 +10,51 @@ export interface DesignSystem {
 export const SLOT_DESIGN_SYSTEMS: DesignSystem[] = [
   {
     colors: [
-      { name: "Fundo", hex: "#ffffff" },
-      { name: "Texto", hex: "#111111" },
-      { name: "Acento", hex: "#6b7280" },
+      { name: "Ink", hex: "#0E0E0E" },
+      { name: "Canvas", hex: "#FFFFFF" },
+      { name: "Slate", hex: "#6B7280" },
     ],
     typography: { heading: "Inter, sans-serif", body: "Inter, sans-serif" },
-    spacing: "24px base, grelha limpa, muito branco",
+    spacing: "4px base, section gaps generosos, hairline + espaco",
   },
   {
     colors: [
-      { name: "Papel", hex: "#f7f4ef" },
-      { name: "Tinta", hex: "#16213e" },
-      { name: "Editorial", hex: "#b33a3a" },
+      { name: "Paper", hex: "#F6F1E9" },
+      { name: "Ink", hex: "#1A1714" },
+      { name: "Rust", hex: "#B23A2E" },
     ],
-    typography: { heading: "Georgia, serif", body: "Inter, sans-serif" },
-    spacing: "20px base, margens editoriais, ritmo de revista",
+    typography: { heading: "Fraunces, Georgia, serif", body: "Inter, sans-serif" },
+    spacing: "4px base, ritmo editorial assimetrico, leitura ate 680px",
   },
   {
     colors: [
-      { name: "Noite", hex: "#0f1115" },
-      { name: "Texto", hex: "#f2f4f8" },
-      { name: "Energia", hex: "#78d64b" },
-    ],
-    typography: { heading: "Inter, sans-serif", body: "Inter, sans-serif" },
-    spacing: "18px base, blocos densos, contraste forte",
-  },
-  {
-    colors: [
-      { name: "Oxblood", hex: "#4b1117" },
-      { name: "Marfim", hex: "#fbfaf7" },
-      { name: "Metal", hex: "#c19a4a" },
-    ],
-    typography: { heading: "Georgia, serif", body: "Inter, sans-serif" },
-    spacing: "28px base, composição premium, secções generosas",
-  },
-  {
-    colors: [
-      { name: "Verde", hex: "#0f6b4f" },
-      { name: "Claro", hex: "#f8fbf8" },
-      { name: "Azul", hex: "#1f7a8c" },
+      { name: "Action", hex: "#F2611B" },
+      { name: "Ink", hex: "#18212E" },
+      { name: "Go", hex: "#1FA871" },
     ],
     typography: { heading: "Inter, sans-serif", body: "Inter, sans-serif" },
-    spacing: "16px base, layout vivo, módulos práticos",
-  },
-  {
-    colors: [
-      { name: "Terracota", hex: "#a0472d" },
-      { name: "Grafite", hex: "#202124" },
-      { name: "Claro", hex: "#ffffff" },
-    ],
-    typography: { heading: "Arial, sans-serif", body: "Inter, sans-serif" },
-    spacing: "22px base, landing comercial, CTA forte",
+    spacing: "4px base, secoes curtas, CTA sempre proximo",
   },
 ]
 
-const CSS_COLOR_RE = /(?:color|background(?:-color)?|border(?:-color)?)\s*:\s*(#[0-9a-fA-F]{3,8}|rgb[a]?\([^)]+\)|[a-z]+)/gi
 const HEX_RE = /#[0-9a-fA-F]{3,8}/g
 const FONT_FAMILY_RE = /font-family\s*:\s*([^;]+)/gi
 
 function extractColors(html: string): { name: string; hex: string }[] {
   const found = new Map<string, string>()
-
-  // From inline styles
-  let m: RegExpExecArray | null
   const styleRe = /style="([^"]*)"/gi
   let styleMatch: RegExpExecArray | null
+
   while ((styleMatch = styleRe.exec(html)) !== null) {
     const style = styleMatch[1]
-    let colorMatch: RegExpExecArray | null
     const colorRe = /(?:color|background(?:-color)?)\s*:\s*(#[0-9a-fA-F]{3,8})/gi
+    let colorMatch: RegExpExecArray | null
     while ((colorMatch = colorRe.exec(style)) !== null) {
       const hex = colorMatch[1].toLowerCase()
       if (!found.has(hex)) found.set(hex, `Cor ${found.size + 1}`)
     }
   }
 
-  // From <style> blocks
   const styleBlocks = html.match(/<style[^>]*>([\s\S]*?)<\/style>/gi) || []
   for (const block of styleBlocks) {
     const matches = block.match(HEX_RE) || []
@@ -95,7 +64,6 @@ function extractColors(html: string): { name: string; hex: string }[] {
     }
   }
 
-  // Fallback: scan whole HTML for hex colors
   if (found.size < 3) {
     const allHex = html.match(HEX_RE) || []
     for (const hex of allHex) {
@@ -109,22 +77,20 @@ function extractColors(html: string): { name: string; hex: string }[] {
 
 function extractFonts(html: string): { heading: string; body: string } {
   const fonts = new Set<string>()
-
-  // From style blocks
   const styleBlocks = html.match(/<style[^>]*>([\s\S]*?)<\/style>/gi) || []
+
   for (const block of styleBlocks) {
-    let m: RegExpExecArray | null
-    while ((m = FONT_FAMILY_RE.exec(block)) !== null) {
-      const family = m[1].split(",")[0].trim().replace(/['"]/g, "")
+    let match: RegExpExecArray | null
+    while ((match = FONT_FAMILY_RE.exec(block)) !== null) {
+      const family = match[1].split(",")[0].trim().replace(/['"]/g, "")
       if (family && !family.startsWith("inherit")) fonts.add(family)
     }
   }
 
-  // From inline styles
   const inlineRe = /font-family\s*:\s*([^;"]+)/gi
-  let m: RegExpExecArray | null
-  while ((m = inlineRe.exec(html)) !== null) {
-    const family = m[1].split(",")[0].trim().replace(/['"]/g, "")
+  let inlineMatch: RegExpExecArray | null
+  while ((inlineMatch = inlineRe.exec(html)) !== null) {
+    const family = inlineMatch[1].split(",")[0].trim().replace(/['"]/g, "")
     if (family) fonts.add(family)
   }
 
@@ -140,7 +106,7 @@ export function extractDesignSystem(scrape: ScrapeResult): DesignSystem {
   const typography = extractFonts(scrape.html)
 
   return {
-    colors: colors.length > 0 ? colors : [{ name: "Primário", hex: "#333333" }, { name: "Secundário", hex: "#666666" }],
+    colors: colors.length > 0 ? colors : [{ name: "Primario", hex: "#333333" }, { name: "Secundario", hex: "#666666" }],
     typography,
     spacing: "16px base, 8px gutter",
   }

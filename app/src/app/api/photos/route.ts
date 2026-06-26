@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { improvePhotoWithFal, type FalPhotoQuality } from "@/lib/fal-photos"
 import { appendPhotoAssets, readHtml, readMeta, readSourceData, saveHtml } from "@/lib/leads"
 import { applyPhotoReplacements, extractPhotoTargets, type PhotoReplacement } from "@/lib/photos"
+import { isValidSlot } from "@/lib/slots"
 import { promises as fs } from "fs"
 import path from "path"
 
@@ -19,8 +20,8 @@ export async function POST(req: NextRequest) {
   const maxImages = Math.max(1, Math.min(Number(body.maxImages) || 3, 6))
   const quality = parseQuality(body.quality)
 
-  if (!slug || !Number.isInteger(slot) || slot < 1 || slot > 6) {
-    return NextResponse.json({ error: "slug e slot 1-6 obrigatórios" }, { status: 400 })
+  if (!slug || !isValidSlot(slot)) {
+    return NextResponse.json({ error: "slug e slot 1-3 obrigatórios" }, { status: 400 })
   }
 
   const meta = await readMeta(slug)

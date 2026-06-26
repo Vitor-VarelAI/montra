@@ -1,21 +1,21 @@
-# Prisma
+# Montra
 
 Maquina de demos de redesign para outbound. Metes o URL de um site, devolve
-**6 versoes redesenhadas**, cada uma num estilo diferente. Objetivo: o golpe de
+**3 versoes redesenhadas**, cada uma num estilo diferente. Objetivo: o golpe de
 vista, o lead para a primeira e pensa "e isto que eu quero".
 
 Ferramenta interna da VVarelAI. Operador unico (Vitor). Corre no VPS Contabo
 (headless), acesso via tunel Cloudflare.
 
-> Uma entrada (URL), seis saidas (versoes). Alinha com Lume, Hermes, Atlas.
+> Uma entrada (URL), tres saidas (versoes). Alinha com Lume, Hermes, Atlas.
 
 ## Como funciona
 
 ```text
 URL -> FireCrawl (conteudo + imagens + design system + screenshot)
     -> Vista de design system (aprovar/ajustar)
-    -> GLM-5.2 gera as 6 versoes [design system + regra global + regra de slot]
-    -> Grid 3x2 (atalhos 1-6)
+    -> GLM-5.2 gera as 3 versoes [design system + regra global + regra de slot]
+    -> Grid 3x1 (atalhos 1-3)
     -> GPT Image 2 (fal) melhora as fotos
     -> Pasta por lead no disco + screenshot do grid no dashboard
 ```
@@ -25,7 +25,7 @@ esta em [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ## Contrato de design
 
-[`DESIGN.md`](DESIGN.md) e o contrato canonico dos 6 estilos. Usa o formato
+[`DESIGN.md`](DESIGN.md) e o indice canonico dos 3 estilos. Usa o formato
 `@google/design.md`: tokens em YAML no topo, racional em Markdown por baixo.
 As regras em `rules/` continuam a ser a camada de prompt; `DESIGN.md` define o
 vocabulario visual que essas regras devem respeitar.
@@ -34,9 +34,10 @@ vocabulario visual que essas regras devem respeitar.
 
 | Pasta | O que e |
 |---|---|
-| `DESIGN.md` | Contrato visual dos 6 estilos e tokens de UI. |
+| `DESIGN.md` | Indice dos 3 estilos + tokens de UI da app. |
+| `design/` | Contratos ricos por slot (`slot-1..3.md`), fidelidade alta. |
 | `docs/` | PRD canonico, arquitetura, custos. |
-| `rules/` | `global.md` + `slots/slot-1..6.md`. Ficheiros como interface. |
+| `rules/` | `global.md` + `slots/slot-1..3.md` (+ `_parked/`). Ficheiros como interface. |
 | `leads/` | Persistencia. Uma pasta por lead, runtime fora do git. |
 | `app/` | Codigo da app, frontend e backend. |
 

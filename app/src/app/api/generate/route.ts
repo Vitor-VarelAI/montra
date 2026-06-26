@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { generateHtml } from "@/lib/glm"
 import { buildSlotPrompt } from "@/lib/prompt"
 import { readMeta, readDesignSystem, readDesignSystems, readSourceData, saveHtml, saveSlotPrompt, writeMeta } from "@/lib/leads"
+import { allSlots, isValidSlot } from "@/lib/slots"
 import { promises as fs } from "fs"
 import path from "path"
 
@@ -10,10 +11,11 @@ const LEADS_DIR = process.env.LEADS_DIR || path.join(process.cwd(), "..", "leads
 export async function POST(req: NextRequest) {
   const body = await req.json()
   const slug: string = body.slug
-  const slots: number[] = body.slots || [1, 2, 3, 4, 5, 6]
+  const slots: number[] = body.slots || allSlots()
   const userPrompts: Record<number, string> = body.userPrompts || {}
 
   if (!slug) return NextResponse.json({ error: "slug obrigatório" }, { status: 400 })
+  if (!slots.every(isValidSlot)) return NextResponse.json({ error: "slot inválido" }, { status: 400 })
 
   const meta = await readMeta(slug)
   if (!meta) return NextResponse.json({ error: "lead não encontrado" }, { status: 404 })

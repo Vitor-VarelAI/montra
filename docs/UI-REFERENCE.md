@@ -1,7 +1,7 @@
 # Referência de UI — ecrã de resultado (clone do Recast)
 
 Capturado da screenshot do Recast fornecida pelo Vitor. É o alvo visual da Fase 5
-(grid das 6). Fundo creme, minimalista.
+(grid das 3). Fundo creme, minimalista.
 
 ## Layout do ecrã de resultado
 
@@ -14,7 +14,7 @@ Capturado da screenshot do Recast fornecida pelo Vitor. É o alvo visual da Fase
 │ Click any one to inspect it, then lock your winner. Keys 1 to 6.           │
 │                                                                            │
 │ ┌─ 01 Variation 01   11,150 tok  $0.046 ┐ ┌─ 02 ... ┐ ┌─ 03 ... ┐          │
-│ │      [landing renderizada]            │ │         │ │         │          │   ← grid 3×2
+│ │      [landing renderizada]            │ │         │ │         │          │   ← grid 3×1
 │ └──────────────────────────────────────┘ └─────────┘ └─────────┘          │
 │ ┌─ 04 ...                              ┐ ┌─ 05 ... ┐ ┌─ 06 ... ┐          │
 │ │      [landing renderizada]            │ │ (dark)  │ │ (warm)  │          │
@@ -25,7 +25,7 @@ Capturado da screenshot do Recast fornecida pelo Vitor. É o alvo visual da Fase
 ## Elementos
 
 **Topo**
-- Esquerda: logótipo/wordmark (no nosso caso, Prisma · VVarelAI).
+- Esquerda: logótipo/wordmark (no nosso caso, Montra · VVarelAI).
 - Direita: `start over` (recomeçar, limpa e volta ao input).
 
 **Header**
@@ -39,11 +39,11 @@ Capturado da screenshot do Recast fornecida pelo Vitor. É o alvo visual da Fase
 - Cabeçalho do card: ponto colorido + `0N  Variation 0N`, e à direita `NN,NNN tok` + `$0.0NN`
   (tokens e custo **daquela** janela).
 - Corpo: a versão renderizada (iframe/sandbox do HTML).
-- Estados: hover → ações `Lock` / `open`; tecla `N` (1-6) seleciona/inspeciona.
+- Estados: hover → ações `Lock` / `open`; tecla `N` (1-3) seleciona/inspeciona.
   No Recast aparece `press 3`, `Lock`, `open` sobre o card focado.
 
 ## Notas para a nossa versão
-- Grid **3×2**, fundo **creme**, atalhos **1-6** — fechado no PRD §5.
+- Grid **3×1**, fundo **creme**, atalhos **1-3** — fechado no PRD §5.
 - O "TIME" + "TOTAL COST" no header e o `tok`/`$` por card encaixam na consciência
   de custo (PRD §7 / `COSTS.md`). Mantê-los é barato e útil para o operador.
 - `start over` = volta à Fase 1 (input).

@@ -12,15 +12,15 @@
 [Fase 2] Extração       FireCrawl: markdown + imagens + design system + screenshot do site antigo
    │                    → escreve em leads/<slug>/source/
    │
-[Fase 3] Design systems Vista própria (separadores estilo Excel). Vitor aprova/ajusta 6 sistemas.
+[Fase 3] Design systems Vista própria (separadores estilo Excel). Vitor aprova/ajusta 3 sistemas.
    │                    → grava leads/<slug>/design-systems.json  (um sistema por slot)
    │
-[Fase 4] Geração        Para cada slot 1..6, em paralelo:
+[Fase 4] Geração        Para cada slot 1..3, em paralelo:
    │                       prompt = design-systems[N] + rules/global.md + rules/slots/slot-N.md
-   │                       GLM-5.2 (via OpenCode/Hermes) → HTML
+   │                       GLM-5.2 (via OpenCode Zen, API HTTP direta) → HTML
    │                    → leads/<slug>/versions/slot-N.html
    │
-[Fase 5] Grid           3×2, creme, atalhos 1-6. Renderiza os 6 HTML.
+[Fase 5] Grid           3×1, creme, atalhos 1-3. Renderiza os 3 HTML.
    │
 [Fase 6] Fotos          Onde as fotos do site antigo são fracas:
    │                       openai/gpt-image-2/edit (preferido, a partir das reais)
@@ -49,7 +49,7 @@ slot (afina por cima), não a substitui.
 **As regras são lidas do disco a cada geração.** Mudar um `.md` muda a geração
 seguinte sem mexer no código (princípio agent-native, PRD §4).
 
-`DESIGN.md` é o contrato visual canónico dos seis estilos. Usa o formato
+`DESIGN.md` é o índice visual canónico dos três estilos. Usa o formato
 `@google/design.md`: YAML para tokens e Markdown para racional. Na v1, as regras
 `.md` continuam a ser lidas diretamente do disco; `DESIGN.md` serve como fonte
 de verdade para nomes, paletas, tipografia, layout e critérios de cada slot.
@@ -69,8 +69,8 @@ leads/<slug>/
 │   └── content.md          # markdown da FireCrawl (opcional guardar)
 ├── design-systems.json     # 6 DS aprovados, um por slot
 ├── versions/
-│   ├── slot-1.html ... slot-6.html
-└── grid.png                # screenshot dos 6 (thumbnail do dashboard, leve)
+│   ├── slot-1.html ... slot-3.html
+└── grid.png                # screenshot dos 3 (thumbnail do dashboard, leve)
 ```
 
 `<slug>` derivado do domínio do lead (ex: `restaurante-x-pt`). A pasta é a fonte
@@ -81,26 +81,32 @@ de verdade — o dashboard lê os `grid.png` das pastas recentes, sem BD.
 | Serviço | Uso | Notas |
 |---|---|---|
 | FireCrawl | scrape → markdown + imagens + DS + screenshot | 1 crédito/scrape. `FIRECRAWL_API_KEY`. |
-| GLM-5.2 | gera os 6 HTML | via OpenCode/Hermes (reutiliza acesso). Ver delegation-gate, §6. |
+| GLM-5.2 | gera os 3 HTML | API HTTP direta do OpenCode Zen (`opencode.ai/zen`), key `OPENCODE_GO_API_KEY`. Não passa pelo Hermes. |
 | fal · GPT Image 2 | melhora/gera fotos | `openai/gpt-image-2/edit` + `openai/gpt-image-2`. `FAL_KEY`. Qualidade média na v1. |
+
+> As três integrações são APIs HTTP independentes, cada uma com a sua key. Nenhum
+> agente está no caminho de runtime da app.
 
 ## 5. Frontend (clone do Recast)
 
 > Alvo visual detalhado (a partir da screenshot do Recast): `docs/UI-REFERENCE.md`.
 
-- Next.js. Grid 3×2, fundo creme, minimalista.
-- Atalhos de teclado **1-6** para selecionar/inspecionar janela.
+- Next.js. Grid 3×1, fundo creme, minimalista.
+- Atalhos de teclado **1-3** para selecionar/inspecionar janela.
 - Loading simples (três pontos / animação leve). **Sem streaming de código.**
 - Vista de design system com separadores em baixo (referência: abas de Excel).
 - Por janela: campo de prompt para regenerar só aquela.
 - Por janela: botão de fotos chama fal, melhora até 3 imagens reais e atualiza o HTML do slot.
 
-## 6. Decisão a resolver antes de volume — delegation-gate (PRD §8)
+## 6. Runtime independente (sem delegation-gate)
 
-O GLM corre via Hermes, que tem o delegation-gate (aviso de custo em runs
-token-heavy). O Prisma dispara 6 gerações/lead × dezenas de leads.
-**Decidir:** as gerações do Prisma disparam o gate, ou passam como trabalho normal
-da app? Não bloqueia a v1, mas resolver antes de correr leads em volume.
+A app não depende de nenhum agente em runtime. O GLM-5.2 é chamado diretamente
+pela API HTTP do OpenCode Zen (`opencode.ai/zen`, compatível com OpenAI), com
+`OPENCODE_GO_API_KEY`. Não passa pelo Hermes, logo **não há delegation-gate a
+resolver** — o antigo pendente (PRD §8) está fechado.
+
+O "Hermes" do projeto refere-se só a quem **escreve** o código (PRD §10), não ao
+runtime. Os dois sentidos não se confundem.
 
 ## 7. Princípios de custo na v1 (PRD §7)
 

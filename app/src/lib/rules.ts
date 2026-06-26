@@ -1,5 +1,6 @@
 import { promises as fs } from "fs"
 import path from "path"
+import { SLOT_COUNT, isValidSlot } from "./slots"
 
 const RULES_DIR = process.env.RULES_DIR || path.join(process.cwd(), "..", "rules")
 
@@ -25,7 +26,7 @@ export async function writeGlobalRule(content: string): Promise<void> {
 }
 
 export async function writeSlotRule(slot: number, content: string): Promise<void> {
-  if (slot < 1 || slot > 6) throw new Error("slot inválido")
+  if (!isValidSlot(slot)) throw new Error("slot inválido")
   const slotsDir = path.join(RULES_DIR, "slots")
   await fs.mkdir(slotsDir, { recursive: true })
   await fs.writeFile(path.join(slotsDir, `slot-${slot}.md`), content)
@@ -33,7 +34,7 @@ export async function writeSlotRule(slot: number, content: string): Promise<void
 
 export async function readAllSlotRules(): Promise<string[]> {
   const rules: string[] = []
-  for (let i = 1; i <= 6; i++) {
+  for (let i = 1; i <= SLOT_COUNT; i++) {
     rules.push(await readSlotRule(i))
   }
   return rules

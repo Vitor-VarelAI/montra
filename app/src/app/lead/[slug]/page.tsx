@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react"
 import { useParams, useRouter } from "next/navigation"
 import type { DesignSystem } from "@/lib/design-system"
+import { SLOT_COUNT, SLOT_NAMES, allSlots } from "@/lib/slots"
 
 interface SlotState {
   html: string | null
@@ -12,15 +13,6 @@ interface SlotState {
   error: string
   prompt: string
 }
-
-const SLOT_NAMES = [
-  "Minimalista Premium",
-  "Editorial de Marca",
-  "Dark Impacto",
-  "Luxo Classico",
-  "Confianca Tecnica",
-  "Conversao Direta",
-]
 
 export default function LeadPage() {
   const params = useParams<{ slug: string }>()
@@ -33,10 +25,10 @@ export default function LeadPage() {
   const [images, setImages] = useState<string[]>([])
   const [activeTab, setActiveTab] = useState<"design" | "rules" | "grid">("design")
   const [slots, setSlots] = useState<SlotState[]>(
-    Array.from({ length: 6 }, () => ({ html: null, loading: false, photoLoading: false, tokens: 0, error: "", prompt: "" })),
+    Array.from({ length: SLOT_COUNT }, () => ({ html: null, loading: false, photoLoading: false, tokens: 0, error: "", prompt: "" })),
   )
   const [globalRule, setGlobalRule] = useState("")
-  const [slotRules, setSlotRules] = useState<string[]>(Array.from({ length: 6 }, () => ""))
+  const [slotRules, setSlotRules] = useState<string[]>(Array.from({ length: SLOT_COUNT }, () => ""))
   const [generating, setGenerating] = useState(false)
   const [selectedSlot, setSelectedSlot] = useState<number | null>(null)
   const [dsEdited, setDsEdited] = useState(false)
@@ -56,9 +48,9 @@ export default function LeadPage() {
     const data = await res.json()
     if (data.designSystem) setDs(data.designSystem)
     if (data.designSystems?.length) {
-      setDesignSystems(data.designSystems)
+      setDesignSystems(data.designSystems.slice(0, SLOT_COUNT))
     } else if (data.designSystem) {
-      setDesignSystems(Array.from({ length: 6 }, () => data.designSystem))
+      setDesignSystems(Array.from({ length: SLOT_COUNT }, () => data.designSystem))
     }
     if (data.content) setContent(data.content)
     if (data.images) setImages(data.images)
@@ -118,8 +110,9 @@ export default function LeadPage() {
     })
     setActiveTab("grid")
 
-    // Generate all 6
-    const promises = [1, 2, 3, 4, 5, 6].map(async (slot) => {
+    // Generate all slots
+    const prompts = slotPromptPayload()
+    const promises = allSlots().map(async (slot) => {
       setSlots((prev) => {
         const next = [...prev]
         next[slot - 1] = { ...next[slot - 1], loading: true, error: "" }
@@ -129,7 +122,7 @@ export default function LeadPage() {
         const res = await fetch("/api/generate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ slug, slots: [slot], userPrompts: slotPromptPayload() }),
+          body: JSON.stringify({ slug, slots: [slot], userPrompts: prompts }),
         })
         const data = await res.json()
         if (!res.ok) throw new Error(data.error || "Erro")
@@ -248,11 +241,11 @@ export default function LeadPage() {
     setDsEdited(true)
   }
 
-  // Keyboard shortcuts 1-6
+  // Keyboard shortcuts 1-3
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       const n = parseInt(e.key)
-      if (n >= 1 && n <= 6) {
+      if (n >= 1 && n <= SLOT_COUNT) {
         setSelectedSlot(n - 1)
       }
     }
@@ -279,7 +272,7 @@ export default function LeadPage() {
             ← Recomeçar
           </button>
           <span className="text-ink/30">·</span>
-          <h2 className="text-lg font-medium">Prisma · {slug}</h2>
+          <h2 className="text-lg font-medium">Montra · {slug}</h2>
         </div>
       </header>
 
@@ -307,7 +300,7 @@ export default function LeadPage() {
             activeTab === "grid" ? "border-ink font-medium" : "border-transparent text-ink/50"
           }`}
         >
-          Grid 3×2
+          Grid 3×1
         </button>
       </div>
 
@@ -434,7 +427,7 @@ export default function LeadPage() {
               disabled={generating}
               className="px-8 py-3 rounded-lg bg-ink text-cream font-medium disabled:opacity-40 transition"
             >
-              {generating ? "A gerar..." : dsEdited ? "Aprovar e gerar 6 versões" : "Aprovar e gerar 6 versões"}
+              {generating ? "A gerar..." : dsEdited ? "Aprovar e gerar 3 versões" : "Aprovar e gerar 3 versões"}
             </button>
           </div>
         </div>
@@ -543,7 +536,7 @@ export default function LeadPage() {
               disabled={generating}
               className="px-4 py-2 rounded-lg bg-ink/90 text-cream text-sm font-medium disabled:opacity-40"
             >
-              {generating ? "A gerar..." : "Gerar 6 versões"}
+              {generating ? "A gerar..." : "Gerar 3 versões"}
             </button>
           </div>
         </div>
@@ -553,7 +546,7 @@ export default function LeadPage() {
       {activeTab === "grid" && (
         <div>
           <div className="flex items-center justify-between mb-4">
-            <p className="text-sm text-ink/60">Clica numa janela para inspecionar. Teclas 1 a 6.</p>
+            <p className="text-sm text-ink/60">Clica numa janela para inspecionar. Teclas 1 a 3.</p>
             <div className="flex gap-3 text-xs text-ink/50">
               <span>{generating ? "A gerar..." : "Pronto"}</span>
             </div>

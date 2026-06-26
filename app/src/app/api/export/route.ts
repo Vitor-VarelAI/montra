@@ -10,14 +10,15 @@ import {
   readSourceData,
 } from "@/lib/leads"
 import { readGlobalRule, readSlotRule } from "@/lib/rules"
+import { isValidSlot } from "@/lib/slots"
 
 export async function GET(req: NextRequest) {
   const slug = req.nextUrl.searchParams.get("slug")
   const slotParam = req.nextUrl.searchParams.get("slot")
   const slot = slotParam ? Number(slotParam) : NaN
 
-  if (!slug || !Number.isInteger(slot) || slot < 1 || slot > 6) {
-    return NextResponse.json({ error: "slug e slot 1-6 obrigatórios" }, { status: 400 })
+  if (!slug || !isValidSlot(slot)) {
+    return NextResponse.json({ error: "slug e slot 1-3 obrigatórios" }, { status: 400 })
   }
 
   const meta = await readMeta(slug)
