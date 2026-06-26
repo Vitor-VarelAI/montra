@@ -1,0 +1,26 @@
+# Segredos
+.env
+.env.local
+.env.*.local
+
+# Dependências / build
+node_modules/
+.next/
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# Persistência runtime — pasta por lead (a fonte de verdade vive no disco do VPS,
+# não no git). O contrato da pasta está documentado em leads/_example/.
+leads/*
+!leads/.gitkeep
+!leads/_example/
+!leads/_example/**
+
+# Sistema / logs
+.DS_Store
+*.log
+npm-debug.log*
+.cache/
+.playwright-cli/
