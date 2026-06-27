@@ -626,7 +626,7 @@ export default function LeadPage() {
                 )}
 
                 {/* Card body */}
-                <div className="aspect-[4/3] bg-cream/50 overflow-hidden">
+                <div className="h-[72vh] min-h-[560px] max-h-[980px] bg-cream/50 overflow-hidden overscroll-contain">
                   {s.loading ? (
                     <div className="flex items-center justify-center h-full">
                       <div className="flex gap-1">
@@ -638,7 +638,7 @@ export default function LeadPage() {
                   ) : s.html ? (
                     <iframe
                       srcDoc={s.html}
-                      className="w-full h-full border-0 pointer-events-none"
+                      className="w-full h-full border-0 pointer-events-auto"
                       sandbox="allow-same-origin"
                       title={`Slot ${i + 1}`}
                     />
