@@ -18,6 +18,10 @@ leads/*
 !leads/_example/
 !leads/_example/**
 
+# Documentacao, prompts e contexto operacional locais
+*.md
+!/README.md
+
 # Sistema / logs
 .DS_Store
 *.log
